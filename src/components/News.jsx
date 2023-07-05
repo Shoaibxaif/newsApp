@@ -12,7 +12,7 @@ export class News extends Component {
   }
 
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=d09b2978dfac40a2ac70a7518332df73&page=1&pageSize=10`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=d09b2978dfac40a2ac70a7518332df73&page=1&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
@@ -27,7 +27,7 @@ export class News extends Component {
 
     let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=d09b2978dfac40a2ac70a7518332df73&page=${
       this.state.page - 1
-    }&pageSize=10`;
+    }&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
@@ -41,12 +41,14 @@ export class News extends Component {
   handlenext = async () => {
     console.log("next");
 
-    if ( this.state.page + 1 > Math.ceil(this.state.totalResults / 10)) {
-      alert("No more pages");
+    if (
+      this.state.page + 1 >
+      Math.ceil(this.state.totalResults / this.props.pageSize)
+    ) {
     } else {
       let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=d09b2978dfac40a2ac70a7518332df73&page=${
         this.state.page + 1
-      }&pageSize=10`;
+      }&pageSize=${this.props.pageSize}`;
       let data = await fetch(url);
       let parsedData = await data.json();
       console.log(parsedData);
@@ -63,15 +65,18 @@ export class News extends Component {
       <div className="container my-4">
         <h1>NewsMonk</h1>
 
-        <div className="row ">
+        <div className="row my-4">
           {this.state.articles.map((element) => {
             return (
-              <div className="col-md-3" key={element.url}>
+              <div className="col-md-4" key={element.url}>
                 <NewsComponent
                   title={element.title ? element.title : ""}
                   description={element.description ? element.description : ""}
                   imageUrl={element.urlToImage}
                   newsUrl={element.url}
+                  author={element.author?element.author:"Unknown"}
+                  date={element.publishedAt}
+                  source={element.source.name}
                 />
               </div>
             );
@@ -89,6 +94,10 @@ export class News extends Component {
           </button>
           <button
             type="button"
+            disabled={
+              this.state.page + 1 >
+              Math.ceil(this.state.totalResults / this.props.pageSize)
+            }
             className="btn btn-dark"
             onClick={this.handlenext}
           >
