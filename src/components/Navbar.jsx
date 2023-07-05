@@ -8,7 +8,7 @@ class Navbar extends Component {
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark text-white">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
-              NewsApp
+            CurrentView
             </Link>
             <button
               className="navbar-toggler"

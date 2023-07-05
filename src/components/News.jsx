@@ -2,13 +2,18 @@ import React, { Component } from "react";
 import NewsComponent from "./NewsComponent";
 
 export class News extends Component {
-  constructor() {
-    super();
+  capitalizeFirstLetter = (string)=>{
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  constructor(props) {
+    super(props);
     this.state = {
       articles: [],
       loading: false,
       page: 1,
+      
     };
+    document.title = `CurrentView - ${this.capitalizeFirstLetter(this.props.category)}`
   }
 
   async componentDidMount() {
@@ -56,6 +61,7 @@ export class News extends Component {
       this.setState({
         page: this.state.page + 1,
         articles: parsedData.articles,
+       
       });
     }
   };
@@ -63,7 +69,7 @@ export class News extends Component {
   render() {
     return (
       <div className="container my-4">
-        <h1>NewsMonk</h1>
+        <h1 className="text-center">CurrentView Top {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
 
         <div className="row my-4">
           {this.state.articles.map((element) => {
